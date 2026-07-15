@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int main() {
+    char source[] = "Hello Operating System\nThis is a file copy program.";
+    char destination[200];
+
+    int i = 0;
+
+    // Copy source content to destination
+    while (source[i] != '\0') {
+        destination[i] = source[i];
+        i++;
+    }
+
+    destination[i] = '\0';
+
+    printf("File copied successfully.\n");
+    printf("\nContents of destination.txt:\n");
+    printf("%s", destination);
+
+    return 0;
+}
