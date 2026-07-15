@@ -1,0 +1,35 @@
+
+#include <stdio.h>
+#include <sys/stat.h>
+#include <time.h>
+
+int main()
+{
+    struct stat fileStat;
+    char filename[100];
+    printf("Enter file name: ");
+    scanf("%s", filename);
+    if (stat(filename, &fileStat) < 0)
+    {
+        perror("stat");
+        return 1;
+    }
+    printf("\nFile Size: %ld bytes\n", fileStat.st_size);
+
+    printf("File Permissions: ");
+
+    printf((fileStat.st_mode & S_IRUSR) ? "r" : "-");
+    printf((fileStat.st_mode & S_IWUSR) ? "w" : "-");
+    printf((fileStat.st_mode & S_IXUSR) ? "x" : "-");
+
+    printf((fileStat.st_mode & S_IRGRP) ? "r" : "-");
+    printf((fileStat.st_mode & S_IWGRP) ? "w" : "-");
+    printf((fileStat.st_mode & S_IXGRP) ? "x" : "-");
+
+    printf((fileStat.st_mode & S_IROTH) ? "r" : "-");
+    printf((fileStat.st_mode & S_IWOTH) ? "w" : "-");
+    printf((fileStat.st_mode & S_IXOTH) ? "x" : "-");
+
+    printf("\nLast Modification Time: %s", ctime(&fileStat.st_mtime));
+
+    return 0;
