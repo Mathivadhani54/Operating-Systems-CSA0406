@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main()
+{
+    int fd;
+
+    fd = dup(STDOUT_FILENO);
+
+    if (fd == -1)
+    {
+        printf("dup failed\n");
+        return 1;
+    }
+
+    dup2(fd, STDOUT_FILENO);
+
+    printf("Hello! Standard output redirected using dup2().\n");
+
+    close(fd);
+
+    return 0;
+}
