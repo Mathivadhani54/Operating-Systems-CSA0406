@@ -1,0 +1,231 @@
+NAME :  MATHIVADHANI K
+REG.NO :192311424
+
+Question 1 
+ANSWER:
+(a)
+The most type of operating system suitable for this environment is MULTI-USER AND TIME SHARING.
+multi-user:multi user is where multiple users can access it.
+time sharing:where tasks have shared equally with specific timing.
+JUSTIFICATION:
+It allows multiple users to log in and run programs simultaneously withou any error
+The CPU is shared among users using time-sharing, giving each process a fair amount of processor time.
+It provides resource sharing CPU, memory, files, and devices while 
+maintaining security and isolation between users.
+
+(b)
+The two respobilities of kernel in managing multiple user proccessors  
+1)process scheduling - the process scheduling which plays vital role in managing multiple user proccessors
+ The kernel schedules CPU time among multiple processes to ensure efficient execution
+2)Memory Management: It allocates and deallocates memory for processes while protecting each process's memory space
+memory management manages the memory used for it 
+3)
+Process Creation and Termination: It creates new processes and safely terminates completed processes
+
+(c)
+pseudocode 
+start
+if pid<0 {create pid }
+print fail
+else if pid ==0 {create child process}
+print child &parent id from pid
+else 
+print parent id from pid
+end if
+end
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid;
+
+    pid = fork(); 
+
+    if (pid < 0) {
+        printf("Fork failed!\n");
+    }
+    else if (pid == 0) {
+       
+        printf("Child Process\n");
+        printf("Child PID = %d\n", getpid());
+        printf("Parent PID = %d\n", getppid());
+    }
+    else {
+       
+        printf("Parent Process\n");
+        printf("Parent PID = %d\n", getpid());
+        printf("Child PID = %d\n", pid);
+    }
+
+    return 0;
+}
+
+
+
+QUESTION 2 
+(a)The system call required for file creation ,writing and reading are
+open()
+which opens a file
+write()
+which used t write in file
+read()
+which used to read it from file
+close()
+which used to close file
+
+(b)
+1. open()
+Used to create a new file or open an existing file 
+makes the work easier for user 
+Returns a file descriptor
+which is used by other system calls to access the file
+
+2. write()
+Used to write data from memory to a file.
+Returns the number of bytes successfully written
+written data can also be mofified by again opening the file 
+
+(C)
+pseuodocode
+start
+create name 
+open file
+write date into file
+close file 
+end 
+
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int fd;
+    char name[] = "John\n";
+    fd = open("student.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    write(fd, name, sizeof(name) - 1);
+    close(fd);
+    return 0;
+}
+
+
+
+QUESTION 3)
+ (a)
+The required system calls are
+open() – Open the source and destination files from the memory 
+
+read() – Read data from the source file as user required
+
+write() – Write data to the destination file
+
+close() – Close both files after the work done.
+
+(b)
+purpose of any two of these system calls are
+1. read()
+
+Reads data from the source file into a buffer
+Returns the number of bytes read
+by using length the total no of char can be found easily
+byte can be calculated easily
+
+2. write()
+
+Writes the data stored in the buffer to the destination file(final file)
+Returns the number of bytes written
+bytes can be calculated easily
+length of written word can be found easily
+
+c)
+START
+Open source file in READ mode
+Open destination file in WRITE mode (create if it does not exist)
+WHILE data can be read from the source file
+Read data into a buffer
+Write the buffer to the destination file
+END WHILE
+Close the source file
+Close the final file
+STOP
+
+
+QUESTION 4)
+(a) = the purpose of the fork() and exec() system calls are 
+
+fork()  Creates a new child process by duplicating the calling (parent) process
+
+exec()  Replaces the current process with a new program and starts executing it
+
+b)
+wait() 
+
+*causes the parent process to wait until the child process finishes execution.
+It ensures the child process completes before the parent continues .
+and it helps prevent zombie/risk processes.
+
+c)
+ to Write a system call sequence using fork(), exec(), and wait().
+START
+pid  fork()
+IF pid = 0 THEN
+    exec("new_program")
+ELSE
+    wait()
+END IF
+STOP
+
+
+
+
+
+
+QUESTION 5)
+a)
+the importance of file management in an operating system
+File management is important because it:
+
+ it helps and Organizes and stores data efficiently on secondary storage
+Allows users and programs to create, access, modify, and delete files
+Provides data security and access control
+Ensures efficient retrieval and management of stored information
+
+
+b)
+the purpose of the open() and close() system calls
+open() – Opens an existing file 
+creates a new file and returns a file descriptor for accessing it 
+its helps users easily to access or use it
+
+close() – Closes the file after use 
+releases the associated system resources
+
+c)
+
+#include <fcntl.h>
+#include <unistd.h>
+int main() {
+    int fd;
+    char buffer[100];
+    fd = open("student.txt", O_RDONLY);
+    read(fd, buffer, sizeof(buffer));
+    close(fd);
+    return 0;
+}
+
+START
+Open file "student.txt" in READ mode
+IF file is opened successfully THEN
+    Read the contents of the file into a buffer
+    Close the file
+ELSE
+    Display "Error"
+END IF
+STOP
+
+
+
+
+
+
+
+
