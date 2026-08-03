@@ -1,0 +1,83 @@
+Q1. Deadlock Debugging 
+
+Root Cause:
+
+The deadlock occurs because the two processes acquire shared resources in different orders.
+
+Process P1 locks R1 first and then attempts to lock R2.
+Process P2 locks R2 first and then attempts to lock R1.
+
+If P1 acquires R1 while P2 acquires R2, each process waits indefinitely for the resource held by the other, creating a circular wait. This satisfies the four necessary conditions for deadlock: mutual exclusion, hold and wait, no preemption, and circular wait.
+
+Optimization:
+
+To eliminate the deadlock without changing the process logic, enforce a consistent resource allocation order. Both processes should always acquire resources in the same sequence (e.g., lock R1 first and then R2). Alternatively, use try-lock with timeout and retry to prevent indefinite waiting.
+
+Result:
+
+Using a fixed resource ordering removes the circular wait condition and prevents deadlock while maintaining the original functionality of the processes.
+
+Q2. CPU Utilization Problem 
+
+Root Cause:
+
+The scheduler log shows repeated transitions between the Ready and Waiting states, indicating that processes frequently request I/O operations. Since the processes spend most of their time waiting for I/O completion rather than executing instructions, the CPU remains idle despite having ready processes. This behavior is characteristic of an I/O-bound workload, resulting in low CPU utilization.
+
+System-Level Optimization:
+
+Increase the degree of multiprogramming so that when one process is waiting for I/O, another ready process can utilize the CPU.
+Improve I/O performance using asynchronous I/O, Direct Memory Access (DMA), faster storage devices, or optimized disk scheduling algorithms to reduce waiting time.
+
+Result:
+
+These optimizations reduce CPU idle time, improve CPU utilization, and increase overall system throughput.
+
+Q3. Memory Bottleneck Debugging 
+
+Root Cause:
+
+The application uses a large heap (150 MB) and 25 threads, each with a 1 MB stack, resulting in significant memory usage and frequent concurrent memory accesses. Although the total memory usage is well within the available 2 GB RAM, the large heap and multiple active threads reduce memory locality and increase page faults, causing performance degradation.
+
+Optimization 1:
+
+Reduce the number of active threads by implementing a thread pool. Reusing a smaller number of worker threads decreases stack memory usage and minimizes memory contention.
+
+Optimization 2:
+
+Improve memory locality by reducing unnecessary heap allocations, reusing allocated memory, and using cache-friendly data structures. This reduces the number of page faults and improves cache performance.
+
+Result:
+
+These optimizations reduce page faults, improve memory access efficiency, and increase the overall performance of the multi-threaded application.
+
+Q4. Starvation Debugging
+
+Root Cause:
+
+Process P5 belongs to the lowest-priority queue (Q3), while the scheduler always gives preference to higher-priority queues (Q1 and Q2). If new interactive or system processes continue to arrive, Q3 processes never receive CPU time, causing starvation.
+
+Optimization:
+
+Implement aging, where the priority of a process gradually increases as its waiting time grows. Eventually, P5 will be promoted to a higher-priority queue and receive CPU time. Another solution is to use a Multilevel Feedback Queue (MLFQ) or a fair scheduling policy that periodically allocates CPU time to lower-priority queues.
+
+Result:
+
+Aging prevents indefinite postponement, ensures fairness, and guarantees that every process eventually receives CPU time.
+
+Q5. Context-Switch Overhead Debugging 
+
+Root Cause:
+
+The scheduler uses a 1 ms time quantum, while the average CPU burst time of each thread is 2 ms. As a result, most threads are preempted before completing their CPU burst, causing frequent context switches. Additionally, the high frequency of I/O operations forces threads to repeatedly transition between the running and waiting states, further increasing context-switch overhead.
+
+Optimization 1:
+
+Increase the time quantum (for example, from 1 ms to 4–5 ms) so that more threads complete their CPU bursts without unnecessary preemption.
+
+Optimization 2:
+
+Reduce unnecessary context switches by improving I/O handling through asynchronous I/O, batching I/O requests, or optimizing scheduling policies to minimize preemption.
+
+Result:
+
+These optimizations reduce the number of context switches, lower CPU overhead, improve CPU efficiency, and increase overall system performance.
