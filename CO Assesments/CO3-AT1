@@ -1,0 +1,537 @@
+NAME:Mathivadhani.K
+REG.NO:192311424
+1. Logical Address to Physical Address Using Base and Limit Registers
+Aim
+
+To design and implement a program that translates a logical address into a physical address using base and limit registers, and checks whether the logical address is valid.
+
+Concept
+Base register: Contains the starting physical address of a process.
+Limit register: Specifies the maximum valid logical address/range.
+If:
+Logical Address<Limit
+
+then the address is valid.
+
+The physical address is calculated as:
+
+Physical Address=Base+Logical Address
+
+If the logical address is greater than or equal to the limit, it is invalid.
+
+Algorithm
+Read the base register value.
+Read the limit register value.
+Read the logical address.
+Check whether logical_address < limit.
+If valid, calculate physical_address = base + logical_address.
+Otherwise, display an invalid-address message.
+Stop.
+C Program
+#include <stdio.h>
+
+int main() {
+    int base, limit, logicalAddress, physicalAddress;
+
+    printf("Enter Base Register value: ");
+    scanf("%d", &base);
+
+    printf("Enter Limit Register value: ");
+    scanf("%d", &limit);
+
+    printf("Enter Logical Address: ");
+    scanf("%d", &logicalAddress);
+
+    if (logicalAddress >= 0 && logicalAddress < limit) {
+        physicalAddress = base + logicalAddress;
+
+        printf("\nAddress Translation Successful\n");
+        printf("Logical Address  : %d\n", logicalAddress);
+        printf("Base Register    : %d\n", base);
+        printf("Limit Register   : %d\n", limit);
+        printf("Physical Address : %d\n", physicalAddress);
+    } else {
+        printf("\nInvalid Logical Address!\n");
+        printf("The address is outside the allowed range.\n");
+    }
+
+    return 0;
+}
+Sample Output – Valid Address
+Enter Base Register value: 1000
+Enter Limit Register value: 500
+Enter Logical Address: 250
+
+Address Translation Successful
+Logical Address  : 250
+Base Register    : 1000
+Limit Register   : 500
+Physical Address : 1250
+Sample Output – Invalid Address
+Enter Base Register value: 1000
+Enter Limit Register value: 500
+Enter Logical Address: 600
+
+Invalid Logical Address!
+The address is outside the allowed range.
+Result
+
+Thus, the program successfully translates a valid logical address into a physical address using base and limit registers and rejects invalid addresses.
+
+2. Paging Memory Management Scheme
+Aim
+
+To implement a program that demonstrates the paging memory management scheme using pages, frames, and a page table.
+
+Concept
+
+Paging divides:
+
+Logical memory into fixed-size pages.
+Physical memory into fixed-size frames.
+
+A logical address consists of:
+
+Logical Address=(Page Number,Offset)
+
+The page table maps the page number to a frame number.
+
+The physical address is:
+
+Physical Address=Frame Number×Page Size+Offset
+Algorithm
+Read the page size.
+Read the number of pages.
+Enter the frame number corresponding to each page.
+Read the page number and offset.
+Check whether the page number is valid.
+Check whether the offset is within the page size.
+Obtain the frame number from the page table.
+Calculate the physical address.
+Display the result.
+C Program
+#include <stdio.h>
+
+int main() {
+    int pageSize, numPages;
+    int pageTable[100];
+    int pageNumber, offset;
+    int frameNumber, physicalAddress;
+    int i;
+
+    printf("Enter page size: ");
+    scanf("%d", &pageSize);
+
+    printf("Enter number of pages: ");
+    scanf("%d", &numPages);
+
+    printf("\nEnter frame number for each page:\n");
+
+    for (i = 0; i < numPages; i++) {
+        printf("Page %d -> Frame: ", i);
+        scanf("%d", &pageTable[i]);
+    }
+
+    printf("\nEnter page number: ");
+    scanf("%d", &pageNumber);
+
+    printf("Enter offset: ");
+    scanf("%d", &offset);
+
+    if (pageNumber < 0 || pageNumber >= numPages) {
+        printf("\nInvalid Page Number!\n");
+    }
+    else if (offset < 0 || offset >= pageSize) {
+        printf("\nInvalid Offset!\n");
+    }
+    else {
+        frameNumber = pageTable[pageNumber];
+
+        physicalAddress = frameNumber * pageSize + offset;
+
+        printf("\nPage Number      : %d\n", pageNumber);
+        printf("Offset           : %d\n", offset);
+        printf("Frame Number     : %d\n", frameNumber);
+        printf("Physical Address : %d\n", physicalAddress);
+    }
+
+    return 0;
+}
+Sample Output
+Enter page size: 100
+Enter number of pages: 4
+
+Enter frame number for each page:
+Page 0 -> Frame: 3
+Page 1 -> Frame: 7
+Page 2 -> Frame: 1
+Page 3 -> Frame: 5
+
+Enter page number: 2
+Enter offset: 25
+
+Page Number      : 2
+Offset           : 25
+Frame Number     : 1
+Physical Address : 125
+Calculation
+
+For page 2:
+
+Frame number = 1
+Page size    = 100
+Offset       = 25
+
+Physical Address = (1 × 100) + 25
+                 = 125
+Result
+
+Thus, the paging memory management scheme was successfully implemented using a page table to translate logical addresses into physical addresses.
+
+3. Simulation of a Page Table
+Aim
+
+To develop a program that accepts page table entries and logical addresses and maps logical pages to physical frames.
+
+Concept
+
+A page table maintains the mapping:
+
+Page Number → Frame Number
+
+For example:
+
+Page 0 → Frame 4
+Page 1 → Frame 2
+Page 2 → Frame 7
+Page 3 → Frame 1
+
+If the logical address contains:
+
+Page = 2
+Offset = 50
+
+and page 2 is mapped to frame 7:
+
+Physical Address=(7×PageSize)+50
+Algorithm
+Read the number of pages.
+Read the page size.
+Enter the frame number for every page.
+Display the page table.
+Read a logical page number and offset.
+Find the corresponding frame number.
+Calculate the physical address.
+Display the translation.
+C Program
+#include <stdio.h>
+
+int main() {
+    int pageTable[100];
+    int numPages, pageSize;
+    int pageNumber, offset;
+    int frameNumber, physicalAddress;
+    int i;
+
+    printf("Enter number of pages: ");
+    scanf("%d", &numPages);
+
+    printf("Enter page size: ");
+    scanf("%d", &pageSize);
+
+    printf("\nEnter Page Table Entries:\n");
+
+    for (i = 0; i < numPages; i++) {
+        printf("Page %d -> Frame: ", i);
+        scanf("%d", &pageTable[i]);
+    }
+
+    printf("\n--- Page Table ---\n");
+    printf("Page\tFrame\n");
+
+    for (i = 0; i < numPages; i++) {
+        printf("%d\t%d\n", i, pageTable[i]);
+    }
+
+    printf("\nEnter logical page number: ");
+    scanf("%d", &pageNumber);
+
+    printf("Enter offset: ");
+    scanf("%d", &offset);
+
+    if (pageNumber < 0 || pageNumber >= numPages) {
+        printf("\nInvalid page number!\n");
+    }
+    else if (offset < 0 || offset >= pageSize) {
+        printf("\nInvalid offset!\n");
+    }
+    else {
+        frameNumber = pageTable[pageNumber];
+
+        physicalAddress =
+            frameNumber * pageSize + offset;
+
+        printf("\n--- Address Translation ---\n");
+        printf("Logical Page Number : %d\n", pageNumber);
+        printf("Offset              : %d\n", offset);
+        printf("Mapped Frame Number : %d\n", frameNumber);
+        printf("Physical Address    : %d\n", physicalAddress);
+    }
+
+    return 0;
+}
+Sample Output
+Enter number of pages: 4
+Enter page size: 100
+
+Enter Page Table Entries:
+Page 0 -> Frame: 5
+Page 1 -> Frame: 2
+Page 2 -> Frame: 8
+Page 3 -> Frame: 4
+
+--- Page Table ---
+Page    Frame
+0       5
+1       2
+2       8
+3       4
+
+Enter logical page number: 2
+Enter offset: 30
+
+--- Address Translation ---
+Logical Page Number : 2
+Offset              : 30
+Mapped Frame Number : 8
+Physical Address    : 830
+Result
+
+The page table successfully maps logical page numbers to physical frame numbers and calculates the corresponding physical addresses.
+
+4. Translation Lookaside Buffer (TLB)
+Aim
+
+To implement a program that simulates a Translation Lookaside Buffer (TLB) and calculates effective memory access time with and without TLB.
+
+Concept
+
+A TLB is a small, fast cache that stores recently used page-to-frame mappings.
+
+Without TLB:
+
+EAT=Memory Access Time+Page Table Access Time
+
+Assuming both accesses take the same time:
+
+EAT
+without
+	​
+
+=2×Memory Access Time
+
+With a TLB:
+
+On a TLB hit, only TLB lookup and memory access are required.
+On a TLB miss, the page table must also be accessed.
+
+A common formula is:
+
+EAT=Hit Ratio(TLB+Memory)+(1−Hit Ratio)(TLB+2Memory)
+Algorithm
+Read memory access time.
+Read TLB lookup time.
+Read TLB hit ratio.
+Calculate EAT without TLB.
+Calculate TLB hit time.
+Calculate TLB miss time.
+Calculate overall EAT.
+Display the results.
+C Program
+#include <stdio.h>
+
+int main() {
+    float memoryTime, tlbTime;
+    float hitRatio;
+    float eatWithoutTLB;
+    float eatWithTLB;
+    float hitTime, missTime;
+
+    printf("Enter Memory Access Time (in ns): ");
+    scanf("%f", &memoryTime);
+
+    printf("Enter TLB Lookup Time (in ns): ");
+    scanf("%f", &tlbTime);
+
+    printf("Enter TLB Hit Ratio (0 to 1): ");
+    scanf("%f", &hitRatio);
+
+    if (hitRatio < 0 || hitRatio > 1) {
+        printf("Invalid hit ratio!\n");
+        return 0;
+    }
+
+    /*
+       Without TLB:
+       Page table access + actual memory access
+    */
+    eatWithoutTLB = 2 * memoryTime;
+
+    /*
+       TLB Hit:
+       TLB lookup + memory access
+    */
+    hitTime = tlbTime + memoryTime;
+
+    /*
+       TLB Miss:
+       TLB lookup + page table access + memory access
+    */
+    missTime = tlbTime + 2 * memoryTime;
+
+    eatWithTLB =
+        (hitRatio * hitTime) +
+        ((1 - hitRatio) * missTime);
+
+    printf("\n--- TLB Performance ---\n");
+    printf("Memory Access Time : %.2f ns\n", memoryTime);
+    printf("TLB Lookup Time    : %.2f ns\n", tlbTime);
+    printf("TLB Hit Ratio      : %.2f\n", hitRatio);
+
+    printf("\nEAT without TLB : %.2f ns\n", eatWithoutTLB);
+    printf("EAT with TLB    : %.2f ns\n", eatWithTLB);
+
+    if (eatWithTLB < eatWithoutTLB)
+        printf("\nTLB improves memory access performance.\n");
+    else
+        printf("\nNo improvement with the given values.\n");
+
+    return 0;
+}
+Sample Output
+Enter Memory Access Time (in ns): 100
+Enter TLB Lookup Time (in ns): 10
+Enter TLB Hit Ratio (0 to 1): 0.90
+
+--- TLB Performance ---
+Memory Access Time : 100.00 ns
+TLB Lookup Time    : 10.00 ns
+TLB Hit Ratio      : 0.90
+
+EAT without TLB : 200.00 ns
+EAT with TLB    : 120.00 ns
+
+TLB improves memory access performance.
+Calculation
+
+TLB hit:
+
+10+100=110ns
+
+TLB miss:
+
+10+100+100=210ns
+
+Therefore:
+
+EAT=(0.9)(110)+(0.1)(210)
+EAT=99+21=120ns
+
+Without TLB:
+
+EAT=100+100=200ns
+
+Thus, the TLB reduces the effective memory access time from 200 ns to 120 ns.
+
+Result
+
+The TLB simulation was successfully implemented, demonstrating that a high TLB hit ratio reduces effective memory access time.
+
+5. Memory Protection Using Base and Limit Registers
+Aim
+
+To implement a program that demonstrates memory protection using base and limit registers and prevents unauthorized memory access.
+
+Concept
+
+Memory protection ensures that a process cannot access memory outside its assigned region.
+
+The valid logical-address range is:
+
+0≤Logical Address<Limit
+
+If the logical address is valid:
+
+Physical Address=Base+Logical Address
+
+Otherwise, access is denied.
+
+Algorithm
+Read the base address.
+Read the limit.
+Read the logical address requested by the process.
+Check whether the logical address is within the limit.
+If valid, calculate the physical address.
+Grant access.
+If invalid, deny access and display a protection error.
+Stop.
+C Program
+#include <stdio.h>
+
+int main() {
+    int base, limit, logicalAddress;
+    int physicalAddress;
+
+    printf("Enter Base Register: ");
+    scanf("%d", &base);
+
+    printf("Enter Limit Register: ");
+    scanf("%d", &limit);
+
+    printf("Enter Logical Address requested by process: ");
+    scanf("%d", &logicalAddress);
+
+    printf("\n--- Memory Protection Check ---\n");
+
+    if (logicalAddress >= 0 && logicalAddress < limit) {
+
+        physicalAddress = base + logicalAddress;
+
+        printf("Access Status     : ALLOWED\n");
+        printf("Logical Address   : %d\n", logicalAddress);
+        printf("Physical Address  : %d\n", physicalAddress);
+        printf("Message            : Address is within the valid range.\n");
+
+    } else {
+
+        printf("Access Status     : DENIED\n");
+        printf("Logical Address   : %d\n", logicalAddress);
+        printf("Message            : Unauthorized memory access!\n");
+        printf("Reason             : Address is outside the limit.\n");
+    }
+
+    return 0;
+}
+Sample Output – Access Allowed
+Enter Base Register: 2000
+Enter Limit Register: 500
+Enter Logical Address requested by process: 300
+
+--- Memory Protection Check ---
+Access Status     : ALLOWED
+Logical Address   : 300
+Physical Address  : 2300
+Message            : Address is within the valid range.
+Sample Output – Access Denied
+Enter Base Register: 2000
+Enter Limit Register: 500
+Enter Logical Address requested by process: 600
+
+--- Memory Protection Check ---
+Access Status     : DENIED
+Logical Address   : 600
+Message            : Unauthorized memory access!
+Reason             : Address is outside the limit.
+Result
+
+The program successfully demonstrates memory protection using base and limit registers. Valid addresses are translated into physical addresses, while invalid addresses are denied.
