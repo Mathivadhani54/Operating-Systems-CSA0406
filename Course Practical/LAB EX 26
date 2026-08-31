@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+int main()
+{
+    FILE *fp;
+    char text[100];
+
+    /* Create and write */
+    fp = fopen("file.txt", "w");
+    if (fp == NULL)
+    {
+        printf("File cannot be created\n");
+        return 1;
+    }
+
+    printf("Enter text: ");
+    fgets(text, sizeof(text), stdin);
+    fprintf(fp, "%s", text);
+    fclose(fp);
+
+    /* Read */
+    fp = fopen("file.txt", "r");
+    printf("\nFile contents:\n");
+
+    while (fgets(text, sizeof(text), fp) != NULL)
+        printf("%s", text);
+
+    fclose(fp);
+
+    /* Append */
+    fp = fopen("file.txt", "a");
+    fprintf(fp, "\nNew text added.");
+    fclose(fp);
+
+    /* Delete */
+    remove("file.txt");
+
+    printf("\nFile deleted successfully.\n");
+
+    return 0;
+}
